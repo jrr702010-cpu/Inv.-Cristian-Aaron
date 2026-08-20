@@ -1,0 +1,274 @@
+{
+  "tipos_producto": [
+    "Panes de Hamburguesas",
+    "Panes para Perro Caliente"
+  ],
+  "productos": [
+    {
+      "id": 1,
+      "nombre": "Mil y un pan de 60",
+      "categoria": "panes",
+      "precio": 7.7,
+      "descripcion": "Pan de perro de 60 los mil y un pan de la marca, Los mil y un pan de 60.",
+      "imagen": "img\\Mil_y_un_pan_de_60_1.jpeg",
+      "descripcion_larga": "",
+      "imagenes_extra": [
+        "img\\Mil_y_un_pan_de_60.jpeg"
+      ],
+      "cantidad_por_paquete": 60,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true
+    },
+    {
+      "id": 2,
+      "nombre": "Vistalago 12 und",
+      "categoria": "panes",
+      "precio": 3.5,
+      "descripcion": "Vistalago pan de hamburguesas de 12 unidades",
+      "imagen": "img\\Vistalago_12_und_1.jpeg",
+      "descripcion_larga": "Vistalago pan de hamburguesas de 12 unidades",
+      "imagenes_extra": [
+        "img\\Vistalago_12_und_2.jpeg"
+      ],
+      "cantidad_por_paquete": 12,
+      "tipo_producto": "Panes de Hamburguesas",
+      "disponible": true
+    },
+    {
+      "id": 3,
+      "nombre": "Bonpan 12 und",
+      "categoria": "panes",
+      "precio": 4.0,
+      "descripcion": "Bonpan pan de hamburguesas de 12 unidades.",
+      "imagen": "img\\Bonpan_12_und_1.jpeg",
+      "descripcion_larga": "Bonpan pan de hamburguesas de 12 unidades.",
+      "cantidad_por_paquete": 12,
+      "tipo_producto": "Panes de Hamburguesas",
+      "disponible": true
+    },
+    {
+      "id": 4,
+      "nombre": "Mil y un pan de perro de 20 unidades",
+      "categoria": "panes",
+      "precio": 2.8,
+      "descripcion": "Mil y pan de perro de 20 unidades.",
+      "imagen": "img\\Mil_y_un_pan_de_perro_de_20_unidades_2.jpeg",
+      "descripcion_larga": "",
+      "cantidad_por_paquete": 1,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "imagenes_extra": [
+        "img\\Mil_y_un_pan_de_perro_de_20_unidades_1.jpeg"
+      ]
+    },
+    {
+      "id": 5,
+      "nombre": "Enmanuel Gouda",
+      "categoria": "charcuteria",
+      "precio": 12.9,
+      "descripcion": "Queso amarillo Enmanuel tipo gouda por kilo.",
+      "imagen": "https://images.unsplash.com/photo-1590165482129-1b8b27698780?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "descripcion_larga": "",
+      "cantidad_por_paquete": 1,
+      "tipo_producto": "",
+      "disponible": false
+    },
+    {
+      "id": 6,
+      "nombre": "Coca-Cola 1.5L Hielo",
+      "categoria": "bebidas",
+      "precio": 2.5,
+      "descripcion": "Refresco helado a punto de congelación.",
+      "imagen": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "cantidad_por_paquete": 1,
+      "tipo_producto": "",
+      "disponible": true
+    },
+    {
+      "id": 7,
+      "nombre": "Brod",
+      "categoria": "panes",
+      "precio": 4.0,
+      "descripcion": "Pan de perro de 20 UND.",
+      "descripcion_larga": "Descripción larga",
+      "imagen": "img\\Brod.jpeg",
+      "imagenes_extra": [
+        "img\\Brod_1.jpeg"
+      ],
+      "cantidad_por_paquete": 20,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true
+    },
+    {
+      "id": 8,
+      "nombre": "Bonpan de 20",
+      "categoria": "panes",
+      "precio": 3.7,
+      "cantidad_por_paquete": 20,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "descripcion": "Pan de perro caliente de 20 unidades de la marca bonpan",
+      "descripcion_larga": "",
+      "imagen": "img\\Bonpan_de_20_1.jpeg",
+      "imagenes_extra": [
+        "img\\Bonpan_de_20.jpeg"
+      ]
+    },
+    {
+      "id": 9,
+      "nombre": "Marmi de 30",
+      "categoria": "panes",
+      "precio": 3.5,
+      "cantidad_por_paquete": 30,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "descripcion": "Marmi pan de perro caliente de 30 unidades",
+      "descripcion_larga": "",
+      "imagen": "img\\Marmi_de_30.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 10,
+      "nombre": "Marmi 10 und",
+      "categoria": "panes",
+      "precio": 1.0,
+      "cantidad_por_paquete": 10,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "descripcion": "Pan de perro caliente de 30 unidades",
+      "descripcion_larga": "",
+      "imagen": "img\\Marmi_10_und.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 11,
+      "nombre": "Marmi de 60",
+      "categoria": "panes",
+      "precio": 6.5,
+      "cantidad_por_paquete": 60,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "descripcion": "Marmi pan de perro caliente de 60",
+      "descripcion_larga": "",
+      "imagen": "img\\Marmi_de_60.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 12,
+      "nombre": "Zulipan de 20 und",
+      "categoria": "panes",
+      "precio": 2.8,
+      "cantidad_por_paquete": 20,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "descripcion": "Pan de perro caliente zulipan de 20 uniades",
+      "descripcion_larga": "",
+      "imagen": "img\\Zulipan_de_20_und.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 13,
+      "nombre": "pan pal dia 2 und",
+      "categoria": "panes",
+      "precio": 0.9,
+      "cantidad_por_paquete": 2,
+      "tipo_producto": "Panes de Hamburguesas",
+      "disponible": true,
+      "descripcion": "Crustissimo pan de hamburguesas de 2 uniadades",
+      "descripcion_larga": "",
+      "imagen": "img\\pan_pal_dia_2_und.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 14,
+      "nombre": "Cristian Aaron de 20 und",
+      "categoria": "panes",
+      "precio": 3.5,
+      "cantidad_por_paquete": 20,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "descripcion": "Pan de perro de 20 unidades, excelencia de la casa",
+      "descripcion_larga": "",
+      "imagen": "img\\Nuevo_Producto_6.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 15,
+      "nombre": "Cristian Aaron de 10 und",
+      "categoria": "panes",
+      "precio": 1.8,
+      "cantidad_por_paquete": 10,
+      "tipo_producto": "Panes para Perro Caliente",
+      "disponible": true,
+      "descripcion": "Pan de perro",
+      "descripcion_larga": "",
+      "imagen": "img\\Cristian_Aaron_de_10_und.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 16,
+      "nombre": "Cristian Aaron hamburguesa 6 und",
+      "categoria": "panes",
+      "precio": 1.8,
+      "cantidad_por_paquete": 6,
+      "tipo_producto": "Panes de Hamburguesas",
+      "disponible": true,
+      "descripcion": "",
+      "descripcion_larga": "",
+      "imagen": "img\\Nuevo_Producto_7.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 17,
+      "nombre": "Aikas pan de hamburguesas 8 und",
+      "categoria": "panes",
+      "precio": 3.4,
+      "cantidad_por_paquete": 8,
+      "tipo_producto": "",
+      "disponible": true,
+      "descripcion": "Aiksas pan de hamburguesas",
+      "descripcion_larga": "",
+      "imagen": "img\\Nuevo_Producto_8.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 18,
+      "nombre": "Aikas pan de sandwich",
+      "categoria": "panes",
+      "precio": 1.2,
+      "cantidad_por_paquete": 1,
+      "tipo_producto": "",
+      "disponible": true,
+      "descripcion": "Pan de sandwich",
+      "descripcion_larga": "",
+      "imagen": "img\\Nuevo_Producto_9.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 19,
+      "nombre": "Marmi pan de hamburguesas",
+      "categoria": "panes",
+      "precio": 3.0,
+      "cantidad_por_paquete": 12,
+      "tipo_producto": "Panes de Hamburguesas",
+      "disponible": true,
+      "descripcion": "Pan de hamburguesas de la marca Marmi",
+      "descripcion_larga": "",
+      "imagen": "img\\Nuevo_Producto_10.jpeg",
+      "imagenes_extra": []
+    },
+    {
+      "id": 20,
+      "nombre": "Nuevo Producto",
+      "categoria": "panes",
+      "precio": 0.0,
+      "cantidad_por_paquete": 1,
+      "tipo_producto": "",
+      "disponible": true,
+      "descripcion": "",
+      "descripcion_larga": "",
+      "imagen": "",
+      "imagenes_extra": []
+    }
+  ]
+}
