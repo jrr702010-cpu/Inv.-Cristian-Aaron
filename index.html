@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Enlaces · X Posts</title>
+<style>
+  :root{
+    --bg: #0b0d17;
+    --bg2: #121425;
+    --card: #171a2e;
+    --card-hover: #1e2239;
+    --border: #262a45;
+    --text: #e8eaf6;
+    --muted: #8b90b8;
+    --accent: #7c5cff;
+    --accent2: #21d4fd;
+    --good: #2fd18a;
+    --danger: #ff6b6b;
+  }
+  *{ box-sizing: border-box; margin: 0; padding: 0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,.18), transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, rgba(33,212,253,.12), transparent 55%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 16px 80px;
+    line-height: 1.5;
+  }
+  .wrap{ max-width: 1080px; margin: 0 auto; }
+
+  /* ---------- HEADER ---------- */
+  header{
+    text-align: center;
+    padding: 28px 20px 32px;
+    margin-bottom: 26px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: linear-gradient(160deg, rgba(124,92,255,.14), rgba(33,212,253,.06) 55%, transparent);
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+  }
+  header::after{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(600px 200px at 50% 0%, rgba(124,92,255,.25), transparent 70%);
+    pointer-events:none;
+  }
+  header h1{
+    font-size: clamp(1.5rem, 4vw, 2.3rem);
+    font-weight: 800; letter-spacing: -.02em;
+    background: linear-gradient(90deg, #fff, #c3b8ff 45%, #7ee7ff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 10px;
+  }
+  header p{ color: var(--muted); font-size: .95rem; }
+  .stats{
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-top: 20px; position: relative; z-index: 1;
+  }
+  .pill{
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--border);
+    font-size: .85rem; font-weight: 600;
+  }
+  .pill b{ color: var(--accent2); font-size: .95rem; }
+  .pill.good b{ color: var(--good); }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{
+    display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    margin-bottom: 22px;
+    position: sticky; top: 12px; z-index: 50;
+    padding: 12px; border-radius: 16px;
+    background: rgba(11,13,23,.82);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(14px);
+  }
+  .search-box{ flex: 1 1 260px; position: relative; display: flex; align-items: center; }
+  .search-box svg{
+    position: absolute; left: 14px; width: 17px; height: 17px;
+    stroke: var(--muted); fill: none; stroke-width: 2; pointer-events: none;
+  }
+  #search{
+    width: 100%; padding: 12px 14px 12px 42px;
+    border-radius: 11px; border: 1px solid var(--border);
+    background: var(--bg2); color: var(--text); font-size: .92rem;
+    font-family: inherit; outline: none;
+    transition: border-color .18s, box-shadow .18s;
+  }
+  #search::placeholder{ color: #5f6490; }
+  #search:focus{ border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,255,.18); }
+
+  .btn{
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 18px; border-radius: 11px;
+    border: 1px solid var(--border);
+    background: var(--card); color: var(--text);
+    font-size: .88rem; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: all .18s; white-space: nowrap;
+  }
+  .btn:hover{ background: var(--card-hover); border-color: var(--accent); transform: translateY(-1px); }
+  .btn:active{ transform: translateY(0); }
+  .btn.primary{
+    background: linear-gradient(135deg, var(--accent), #5b8cff);
+    border-color: transparent; color: #fff;
+    box-shadow: 0 6px 18px -6px rgba(124,92,255,.75);
+  }
+  .btn.primary:hover{ filter: brightness(1.1); }
+  .btn.ok{ border-color: var(--good); color: var(--good); }
+  .btn.danger{ border-color: rgba(255,107,107,.4); color: var(--danger); }
+  .btn.danger:hover{ border-color: var(--danger); background: rgba(255,107,107,.1); }
+
+  /* ---------- LIST ---------- */
+  .list{ display: flex; flex-direction: column; gap: 9px; }
+  .item{
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px; border-radius: 13px;
+    background: var(--card); border: 1px solid var(--border);
+    transition: all .16s ease;
+    animation: fadeIn .25s ease both;
+    flex-wrap: wrap;
+  }
+  @keyframes fadeIn{ from{ opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
+  .item:hover{
+    background: var(--card-hover);
+    border-color: rgba(124,92,255,.55);
+    box-shadow: 0 6px 20px -10px rgba(124,92,255,.7);
+  }
+
+  /* ---------- MARCA DE ABIERTO ---------- */
+  .item.opened{
+    border-left: 3px solid var(--good);
+    background: linear-gradient(90deg, rgba(47,209,138,.10), var(--card) 45%);
+  }
+  .item.opened:hover{
+    border-color: var(--good);
+    box-shadow: 0 6px 20px -10px rgba(47,209,138,.55);
+  }
+  .item.opened .num{
+    background: rgba(47,209,138,.18);
+    border-color: rgba(47,209,138,.55);
+    color: var(--good);
+  }
+  .item.opened .link{ color: var(--muted); opacity: .7; }
+  .item.opened .link .handle{ color: var(--muted); }
+  .check{
+    flex: 0 0 auto; width: 20px; height: 20px;
+    display: none; align-items: center; justify-content: center;
+    border-radius: 50%; background: var(--good);
+    color: #042b1a; font-size: .75rem; font-weight: 900;
+    box-shadow: 0 0 0 3px rgba(47,209,138,.18);
+  }
+  .item.opened .check{ display: flex; animation: pop .25s ease; }
+  @keyframes pop{ 0%{ transform: scale(.4);} 60%{ transform: scale(1.15);} 100%{ transform: scale(1);} }
+
+  .num{
+    flex: 0 0 auto; min-width: 44px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 8px; border-radius: 9px;
+    background: rgba(124,92,255,.14);
+    border: 1px solid rgba(124,92,255,.3);
+    color: #b9aaff; font-size: .78rem; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .link{
+    flex: 1 1 auto; color: #c9d2ff; text-decoration: none;
+    font-size: .9rem; word-break: break-all; transition: color .15s;
+  }
+  .link:hover{ color: var(--accent2); text-decoration: underline; }
+  .link .handle{ color: #fff; font-weight: 700; }
+  .link .id{ color: var(--muted); }
+
+  .copy{
+    flex: 0 0 auto; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 9px; border: 1px solid var(--border);
+    background: transparent; cursor: pointer;
+    transition: all .16s; opacity: .55;
+  }
+  .item:hover .copy{ opacity: 1; }
+  .copy:hover{ background: rgba(124,92,255,.18); border-color: var(--accent); }
+  .copy svg{ width: 15px; height: 15px; stroke: var(--text); fill: none; stroke-width: 2; }
+  .copy.done svg{ stroke: var(--good); }
+  .copy.done{ border-color: var(--good); }
+
+  /* ---------- BOTÓN VISTA PREVIA ---------- */
+  .preview-toggle{
+    flex: 0 0 auto;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 9px;
+    border: 1px solid var(--border);
+    background: transparent; color: var(--accent2);
+    font-size: .8rem; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: all .16s; white-space: nowrap;
+    opacity: .65;
+  }
+  .item:hover .preview-toggle{ opacity: 1; }
+  .preview-toggle:hover{
+    background: rgba(33,212,253,.12);
+    border-color: var(--accent2);
+    transform: translateY(-1px);
+  }
+  .preview-toggle svg{
+    width: 14px; height: 14px; stroke: currentColor;
+    fill: none; stroke-width: 2;
+  }
+  .preview-toggle.active{
+    background: rgba(33,212,253,.14);
+    border-color: var(--accent2);
+    color: #fff; opacity: 1;
+  }
+
+  /* ---------- CONTENEDOR DE VISTA PREVIA ---------- */
+  .preview-container{
+    flex: 0 0 100%;
+    width: 100%;
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    animation: fadeIn .25s ease;
+  }
+  .preview-container.show{ display: block; }
+  .preview-inner{
+    max-width: 560px; margin: 0 auto;
+    min-height: 120px;
+    border-radius: 12px;
+    background: var(--bg2);
+    padding: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .preview-inner .loading{
+    color: var(--muted); font-size: .85rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .preview-spinner{
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent2);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .preview-error{
+    color: var(--danger); font-size: .85rem;
+    text-align: center; padding: 16px;
+  }
+
+  /* ---------- ESTADOS ESPECIALES ---------- */
+  .status-box{
+    text-align: center; padding: 50px 24px;
+    border: 1px dashed var(--border); border-radius: 16px;
+    color: var(--muted);
+  }
+  .status-box code{
+    background: rgba(124,92,255,.15); color: #c3b8ff;
+    padding: 2px 8px; border-radius: 6px; font-size: .9em;
+  }
+  .status-box.error{ border-color: rgba(255,107,107,.4); color: #ffb0b0; }
+  .status-box .hint{ margin-top: 12px; font-size: .88rem; line-height: 1.7; }
+  .spinner{
+    width: 32px; height: 32px; margin: 0 auto 16px;
+    border: 3px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 1s linear infinite;
+  }
+  .empty{ display: none; }
+  .empty.show{ display: block; }
+
+  footer{ text-align: center; margin-top: 40px; color: #5f6490; font-size: .82rem; }
+
+  ::-webkit-scrollbar{ width: 11px; }
+  ::-webkit-scrollbar-track{ background: var(--bg); }
+  ::-webkit-scrollbar-thumb{ background: #2c3154; border-radius: 99px; border: 3px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover{ background: var(--accent); }
+
+  @media (max-width: 620px){
+    body{ padding: 16px 10px 60px; }
+    .item{ padding: 11px 12px; gap: 10px; }
+    .num{ min-width: 38px; height: 27px; font-size: .72rem; }
+    .link{ font-size: .8rem; }
+    .copy{ width: 30px; height: 30px; }
+    .btn{ padding: 11px 14px; font-size: .82rem; }
+    .preview-toggle{ padding: 6px 9px; font-size: .75rem; }
+    .preview-toggle span{ display: none; }
+    .preview-toggle svg{ width: 16px; height: 16px; }
+    .toolbar{ top: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Lista de Enlaces · X Posts</h1>
+    <p>Colección numerada y navegable de publicaciones</p>
+    <div class="stats">
+      <span class="pill">Total: <b id="total">0</b></span>
+      <span class="pill">Mostrando: <b id="shown">0</b></span>
+      <span class="pill">Autores: <b id="authors">0</b></span>
+      <span class="pill good">Abiertos: <b id="openedCount">0</b></span>
+      <span class="pill">Vistas previas: <b id="previewCount">0</b></span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      <input type="text" id="search" placeholder="Buscar por usuario, ID o número…" autocomplete="off">
+    </div>
+    <button class="btn" id="copyAll" title="Copiar todos los enlaces al portapapeles">
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2">
+        <rect x="9" y="9" width="12" height="12" rx="2"/>
+        <path d="M5 15V5a2 2 0 0 1 2-2h10"/>
+      </svg>
+      Copiar todos
+    </button>
+    <button class="btn danger" id="clearMarks" title="Olvidar qué enlaces has abierto y previsualizado">
+      <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2">
+        <path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+      </svg>
+      Limpiar marcas
+    </button>
+  </div>
+
+  <div id="status" class="status-box">
+    <div class="spinner"></div>
+    Cargando enlaces desde <code>enlaces.txt</code>…
+  </div>
+
+  <div class="list" id="list" style="display:none"></div>
+  <div class="status-box empty" id="empty">🔍 No se encontraron enlaces para esa búsqueda.</div>
+
+  <footer>
+    <p>Los enlaces se abren en una pestaña nueva · Tus marcas se guardan localmente en este navegador</p>
+  </footer>
+
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN
+   ============================================================ */
+const ARCHIVO_ENLACES = 'enlaces.txt';
+const STORAGE_OPENED  = 'xlinks_opened_v1';
+const STORAGE_PREVIEW = 'xlinks_preview_v1';
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+let LINKS = [];
+let openedSet  = new Set();
+let previewSet = new Set();
+
+// Control global de la carga del script de X
+let xScriptPromise = null;
+
+/* ============================================================
+   PERSISTENCIA
+   ============================================================ */
+function cargarSets(){
+  try {
+    const a = localStorage.getItem(STORAGE_OPENED);
+    const b = localStorage.getItem(STORAGE_PREVIEW);
+    openedSet  = new Set(a ? JSON.parse(a) : []);
+    previewSet = new Set(b ? JSON.parse(b) : []);
+  } catch(e){
+    openedSet = new Set(); previewSet = new Set();
+  }
+}
+function guardarSet(key, set){
+  try { localStorage.setItem(key, JSON.stringify([...set])); } catch(e){}
+}
+
+/* ============================================================
+   CARGA DEL ARCHIVO EXTERNO
+   ============================================================ */
+async function cargarEnlaces(){
+  const res = await fetch(ARCHIVO_ENLACES, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const txt = await res.text();
+  return txt.split(/\r?\n/)
+    .map(l => l.trim())
+    .filter(l => l && !l.startsWith('#') && /^https?:\/\//i.test(l));
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+const handleOf = u => (u.match(/x\.com\/([^/]+)\//) || [,''])[1];
+const idOf     = u => (u.match(/status\/(\d+)/)    || [,''])[1];
+
+/* ============================================================
+   CARGA ÚNICA DEL SCRIPT DE X (lazy, solo al primer clic)
+   ============================================================ */
+function cargarScriptX(){
+  if (xScriptPromise) return xScriptPromise;
+
+  xScriptPromise = new Promise((resolve, reject) => {
+    if (window.twttr && window.twttr.widgets) return resolve(window.twttr);
+
+    const s = document.createElement('script');
+    s.src = 'https://platform.x.com/widgets.js';
+    s.async = true;
+    s.charset = 'utf-8';
+    s.onload = () => {
+      if (window.twttr && window.twttr.ready){
+        window.twttr.ready(t => resolve(t));
+      } else {
+        reject(new Error('twttr no disponible tras cargar el script'));
+      }
+    };
+    s.onerror = () => reject(new Error('No se pudo cargar widgets.js'));
+    document.head.appendChild(s);
+  });
+
+  return xScriptPromise;
+}
+
+/* ============================================================
+   RENDER PRINCIPAL
+   ============================================================ */
+function render(){
+  const listEl = document.getElementById('list');
+  listEl.innerHTML = '';
+
+  if (!LINKS.length){
+    document.getElementById('status').style.display = 'none';
+    const empty = document.getElementById('empty');
+    empty.classList.add('show');
+    empty.textContent = 'El archivo enlaces.txt está vacío.';
+    return;
+  }
+
+  document.getElementById('status').style.display = 'none';
+  listEl.style.display = '';
+
+  const frag = document.createDocumentFragment();
+
+  LINKS.forEach((url, i) => {
+    const handle  = handleOf(url);
+    const id      = idOf(url);
+    const abierto = openedSet.has(url);
+
+    const row = document.createElement('div');
+    row.className = 'item' + (abierto ? ' opened' : '');
+    row.dataset.search = (url + ' ' + handle + ' ' + (i + 1)).toLowerCase();
+    row.dataset.url = url;
+    row.dataset.id  = id;
+
+    const check = document.createElement('span');
+    check.className = 'check';
+    check.textContent = '✓';
+
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = i + 1;
+
+    const a = document.createElement('a');
+    a.className = 'link';
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.title = url;
+    a.innerHTML =
+      '<span class="handle">@' + handle + '</span>' +
+      '<span class="id">/status/' + id + '</span>';
+    a.addEventListener('click', () => marcarAbierto(url, row));
+
+    // -------- Botón "Vista previa" --------
+    const previewBtn = document.createElement('button');
+    previewBtn.className = 'preview-toggle';
+    previewBtn.type = 'button';
+    previewBtn.title = 'Cargar vista previa del post';
+    previewBtn.innerHTML =
+      '<svg viewBox="0 0 24 24">' +
+        '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>' +
+        '<circle cx="12" cy="12" r="3"/>' +
+      '</svg><span>Vista previa</span>';
+
+    // -------- Contenedor de la vista previa --------
+    const previewBox = document.createElement('div');
+    previewBox.className = 'preview-container';
+    const previewInner = document.createElement('div');
+    previewInner.className = 'preview-inner';
+    previewBox.appendChild(previewInner);
+
+    previewBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePreview(url, id, row, previewBtn, previewBox, previewInner);
+    });
+
+    // -------- Botón copiar --------
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy';
+    copyBtn.type = 'button';
+    copyBtn.title = 'Copiar enlace';
+    copyBtn.setAttribute('aria-label', 'Copiar enlace');
+    copyBtn.innerHTML =
+      '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/>' +
+      '<path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+    copyBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try { await navigator.clipboard.writeText(url); }
+      catch(_){
+        const ta = document.createElement('textarea');
+        ta.value = url; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); ta.remove();
+      }
+      copyBtn.classList.add('done');
+      setTimeout(() => copyBtn.classList.remove('done'), 1200);
+    });
+
+    row.append(check, num, a, previewBtn, copyBtn, previewBox);
+    frag.appendChild(row);
+  });
+
+  listEl.appendChild(frag);
+
+  document.getElementById('total').textContent   = LINKS.length;
+  document.getElementById('shown').textContent   = LINKS.length;
+  document.getElementById('authors').textContent = new Set(LINKS.map(handleOf)).size;
+  actualizarContadores();
+}
+
+/* ============================================================
+   TOGGLE DE VISTA PREVIA
+   ============================================================ */
+async function togglePreview(url, id, row, btn, box, inner){
+  // Si ya está abierta, la cerramos
+  if (box.classList.contains('show')){
+    box.classList.remove('show');
+    btn.classList.remove('active');
+    btn.querySelector('span').textContent = 'Vista previa';
+    inner.innerHTML = '';
+    return;
+  }
+
+  // Abrimos
+  box.classList.add('show');
+  btn.classList.add('active');
+  btn.querySelector('span').textContent = 'Cerrar vista';
+
+  inner.innerHTML = '<div class="loading"><span class="preview-spinner"></span>Cargando vista previa…</div>';
+
+  try {
+    const twttr = await cargarScriptX();
+    inner.innerHTML = '';
+
+    await twttr.widgets.createTweet(id, inner, {
+      theme: 'dark',
+      align: 'center',
+      conversation: 'none',
+      dnt: true,
+      lang: 'es'
+    });
+
+    previewSet.add(url);
+    guardarSet(STORAGE_PREVIEW, previewSet);
+    actualizarContadores();
+
+  } catch(err){
+    inner.innerHTML =
+      '<div class="preview-error">No se pudo cargar la vista previa.<br>' +
+      'Es posible que el post ya no esté disponible.</div>';
+  }
+}
+
+/* ============================================================
+   MARCADO COMO ABIERTO
+   ============================================================ */
+function marcarAbierto(url, row){
+  if (openedSet.has(url)) return;
+  openedSet.add(url);
+  guardarSet(STORAGE_OPENED, openedSet);
+  row.classList.add('opened');
+  actualizarContadores();
+}
+
+/* ============================================================
+   CONTADORES
+   ============================================================ */
+function actualizarContadores(){
+  const abiertos  = LINKS.filter(u => openedSet.has(u)).length;
+  const previsual = LINKS.filter(u => previewSet.has(u)).length;
+  document.getElementById('openedCount').textContent  = abiertos;
+  document.getElementById('previewCount').textContent = previsual;
+}
+
+/* ============================================================
+   BUSCADOR
+   ============================================================ */
+function activarBuscador(){
+  const searchEl = document.getElementById('search');
+  const emptyEl  = document.getElementById('empty');
+
+  searchEl.addEventListener('input', () => {
+    const q = searchEl.value.trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('.item').forEach(el => {
+      const match = !q || el.dataset.search.includes(q);
+      el.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    document.getElementById('shown').textContent = visible;
+    if (LINKS.length && visible === 0){
+      emptyEl.classList.add('show');
+      emptyEl.textContent = '🔍 No se encontraron enlaces para esa búsqueda.';
+    } else {
+      emptyEl.classList.remove('show');
+    }
+  });
+}
+
+/* ============================================================
+   ACCIONES GLOBALES
+   ============================================================ */
+function activarCopiarTodo(){
+  document.getElementById('copyAll').addEventListener('click', async (e) => {
+    const btn = e.currentTarget;
+    const original = btn.innerHTML;
+    const texto = LINKS.join('\n');
+    try { await navigator.clipboard.writeText(texto); }
+    catch(_){
+      const ta = document.createElement('textarea');
+      ta.value = texto; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove();
+    }
+    btn.classList.add('ok');
+    btn.innerHTML = '✓ ¡Copiados!';
+    setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = original; }, 1800);
+  });
+}
+
+function activarLimpiarMarcas(){
+  document.getElementById('clearMarks').addEventListener('click', () => {
+    if (!openedSet.size && !previewSet.size) return;
+    if (!confirm('¿Olvidar qué enlaces has abierto y previsualizado?')) return;
+    openedSet.clear(); previewSet.clear();
+    guardarSet(STORAGE_OPENED, openedSet);
+    guardarSet(STORAGE_PREVIEW, previewSet);
+    document.querySelectorAll('.item.opened').forEach(el => el.classList.remove('opened'));
+    document.querySelectorAll('.preview-container.show').forEach(box => {
+      box.classList.remove('show');
+      box.querySelector('.preview-inner').innerHTML = '';
+    });
+    document.querySelectorAll('.preview-toggle.active').forEach(b => {
+      b.classList.remove('active');
+      b.querySelector('span').textContent = 'Vista previa';
+    });
+    actualizarContadores();
+  });
+}
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+(async function init(){
+  cargarSets();
+  activarBuscador();
+  activarCopiarTodo();
+  activarLimpiarMarcas();
+
+  try {
+    LINKS = await cargarEnlaces();
+    render();
+  } catch(err){
+    const st = document.getElementById('status');
+    st.className = 'status-box error';
+    st.innerHTML = `
+      <p><strong>No se pudo cargar la lista de enlaces</strong></p>
+      <p style="margin-top:10px;font-size:.9rem">${err.message}</p>
+      <div class="hint">
+        Asegúrate de que <code>${ARCHIVO_ENLACES}</code> esté en la misma carpeta que este HTML.<br>
+        Si abriste el archivo con doble clic (<code>file://</code>), el navegador bloquea <code>fetch()</code>.
+        Sirve la carpeta con un servidor local, por ejemplo:<br>
+        <code>python -m http.server 8000</code> y visita <code>http://localhost:8000</code>
+      </div>`;
+  }
+})();
+</script>
+</body>
+</html>
