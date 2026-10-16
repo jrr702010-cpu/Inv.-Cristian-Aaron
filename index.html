@@ -73,11 +73,12 @@
   .pill b{ color: var(--accent2); font-size: .95rem; }
   .pill.good b{ color: var(--good); }
   .pill.like b{ color: var(--like); }
+  .pill.muted b{ color: var(--muted); }
 
   /* ---------- TOOLBAR ---------- */
   .toolbar{
     display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
-    margin-bottom: 22px;
+    margin-bottom: 14px;
     position: sticky; top: 12px; z-index: 50;
     padding: 12px; border-radius: 16px;
     background: rgba(11,13,23,.82);
@@ -109,15 +110,56 @@
   }
   .btn:hover{ background: var(--card-hover); border-color: var(--accent); transform: translateY(-1px); }
   .btn:active{ transform: translateY(0); }
-  .btn.primary{
-    background: linear-gradient(135deg, var(--accent), #5b8cff);
-    border-color: transparent; color: #fff;
-    box-shadow: 0 6px 18px -6px rgba(124,92,255,.75);
-  }
-  .btn.primary:hover{ filter: brightness(1.1); }
   .btn.ok{ border-color: var(--good); color: var(--good); }
   .btn.danger{ border-color: rgba(255,107,107,.4); color: var(--danger); }
   .btn.danger:hover{ border-color: var(--danger); background: rgba(255,107,107,.1); }
+
+  /* ---------- TABS ---------- */
+  .tabs{
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 6px;
+    border-radius: 14px;
+    background: rgba(11,13,23,.6);
+    border: 1px solid var(--border);
+    width: fit-content;
+    max-width: 100%;
+  }
+  .tab{
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: .9rem; font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .tab:hover{ color: var(--text); background: rgba(255,255,255,.04); }
+  .tab.active{
+    background: linear-gradient(135deg, var(--accent), #5b8cff);
+    color: #fff;
+    box-shadow: 0 6px 18px -6px rgba(124,92,255,.6);
+  }
+  .tab.active[data-view="archived"]{
+    background: linear-gradient(135deg, #2fd18a, #21a76a);
+    box-shadow: 0 6px 18px -6px rgba(47,209,138,.6);
+  }
+  .tab .badge{
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 22px; height: 22px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.12);
+    font-size: .75rem; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .tab.active .badge{ background: rgba(255,255,255,.28); }
+  .tab[data-view="archived"] .badge{ color: var(--good); background: rgba(47,209,138,.15); }
+  .tab.active[data-view="archived"] .badge{ color: #fff; background: rgba(255,255,255,.28); }
 
   /* ---------- LIST ---------- */
   .list{ display: flex; flex-direction: column; gap: 9px; }
@@ -136,10 +178,22 @@
     box-shadow: 0 6px 20px -10px rgba(124,92,255,.7);
   }
 
-  /* ---------- MARCA DE ABIERTO ---------- */
+  .item.removing{
+    animation: slideOut .38s ease forwards;
+    pointer-events: none;
+  }
+  @keyframes slideOut{
+    to{
+      opacity: 0;
+      transform: translateX(60px) scale(.96);
+      filter: blur(3px);
+    }
+  }
+
+  /* ---------- MARCA DE ARCHIVADO ---------- */
   .item.opened{
     border-left: 3px solid var(--good);
-    background: linear-gradient(90deg, rgba(47,209,138,.10), var(--card) 45%);
+    background: linear-gradient(90deg, rgba(47,209,138,.08), var(--card) 45%);
   }
   .item.opened:hover{
     border-color: var(--good);
@@ -150,7 +204,7 @@
     border-color: rgba(47,209,138,.55);
     color: var(--good);
   }
-  .item.opened .link{ color: var(--muted); opacity: .7; }
+  .item.opened .link{ color: var(--muted); opacity: .75; }
   .item.opened .link .handle{ color: var(--muted); }
   .check{
     flex: 0 0 auto; width: 20px; height: 20px;
@@ -202,12 +256,10 @@
     transform: translateY(-1px);
   }
 
-  /* Copiar */
   .copy{ color: var(--text); }
   .copy.done svg{ stroke: var(--good); }
   .copy.done{ border-color: var(--good); }
 
-  /* Like */
   .like-btn{ color: var(--like); }
   .like-btn:hover{
     background: rgba(249,24,128,.14);
@@ -230,68 +282,19 @@
     100%{ transform: scale(1); }
   }
 
-  /* ---------- BOTÓN VISTA PREVIA ---------- */
-  .preview-toggle{
-    flex: 0 0 auto;
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 12px; border-radius: 9px;
-    border: 1px solid var(--border);
-    background: transparent; color: var(--accent2);
-    font-size: .8rem; font-weight: 600; font-family: inherit;
-    cursor: pointer; transition: all .16s; white-space: nowrap;
-    opacity: .65;
-  }
-  .item:hover .preview-toggle{ opacity: 1; }
-  .preview-toggle:hover{
-    background: rgba(33,212,253,.12);
-    border-color: var(--accent2);
-    transform: translateY(-1px);
-  }
-  .preview-toggle svg{
-    width: 14px; height: 14px; stroke: currentColor;
-    fill: none; stroke-width: 2;
-  }
-  .preview-toggle.active{
+  .restore{ color: var(--accent2); }
+  .restore:hover{
     background: rgba(33,212,253,.14);
     border-color: var(--accent2);
-    color: #fff; opacity: 1;
   }
 
-  /* ---------- CONTENEDOR DE VISTA PREVIA ---------- */
-  .preview-container{
-    flex: 0 0 100%;
-    width: 100%;
-    display: none;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--border);
-    animation: fadeIn .25s ease;
+  /* Eliminar (solo en archivados) */
+  .delete-btn{ color: var(--danger); }
+  .delete-btn:hover{
+    background: rgba(255,107,107,.14);
+    border-color: var(--danger);
   }
-  .preview-container.show{ display: block; }
-  .preview-inner{
-    max-width: 560px; margin: 0 auto;
-    min-height: 120px;
-    border-radius: 12px;
-    background: var(--bg2);
-    padding: 8px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .preview-inner .loading{
-    color: var(--muted); font-size: .85rem;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .preview-spinner{
-    width: 16px; height: 16px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent2);
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-  }
-  @keyframes spin{ to{ transform: rotate(360deg); } }
-  .preview-error{
-    color: var(--danger); font-size: .85rem;
-    text-align: center; padding: 16px;
-  }
+  .delete-btn svg{ fill: none; stroke: var(--danger); }
 
   /* ---------- ESTADOS ESPECIALES ---------- */
   .status-box{
@@ -310,6 +313,7 @@
     border: 3px solid var(--border); border-top-color: var(--accent);
     border-radius: 50%; animation: spin 1s linear infinite;
   }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
   .empty{ display: none; }
   .empty.show{ display: block; }
 
@@ -320,6 +324,61 @@
   ::-webkit-scrollbar-thumb{ background: #2c3154; border-radius: 99px; border: 3px solid var(--bg); }
   ::-webkit-scrollbar-thumb:hover{ background: var(--accent); }
 
+  /* ---------- BOTÓN FLOTANTE SCROLL ---------- */
+  .scroll-fab{
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(23, 26, 46, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--text);
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 8px 24px -8px rgba(0,0,0,.7),
+      0 0 0 1px rgba(124,92,255,.12),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    transition: all .22s ease;
+  }
+  .scroll-fab:hover{
+    background: var(--card-hover);
+    border-color: var(--accent);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:
+      0 14px 32px -8px rgba(124,92,255,.7),
+      0 0 0 1px rgba(124,92,255,.35),
+      inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .scroll-fab:active{ transform: translateY(-1px) scale(1); }
+  .scroll-fab svg{
+    width: 22px; height: 22px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .scroll-fab.to-top svg{ transform: rotate(180deg); }
+  .scroll-fab.to-bottom svg{ transform: rotate(0deg); }
+  .scroll-fab::before{
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--accent2);
+    opacity: 0;
+    transition: opacity .3s;
+    animation: spin 1.4s linear infinite;
+  }
+  .scroll-fab.scrolling::before{ opacity: 1; }
+
   @media (max-width: 620px){
     body{ padding: 16px 10px 60px; }
     .item{ padding: 11px 12px; gap: 10px; }
@@ -328,13 +387,16 @@
     .action-btn{ width: 30px; height: 30px; }
     .action-btn svg{ width: 14px; height: 14px; }
     .btn{ padding: 11px 14px; font-size: .82rem; }
-    .preview-toggle{ padding: 6px 9px; font-size: .75rem; }
-    .preview-toggle span{ display: none; }
-    .preview-toggle svg{ width: 16px; height: 16px; }
     .toolbar{ top: 8px; }
+    .tabs{ width: 100%; }
+    .tab{ flex: 1 1 auto; justify-content: center; padding: 9px 12px; font-size: .82rem; }
+    .scroll-fab{ width: 46px; height: 46px; bottom: 16px; right: 16px; }
+    .scroll-fab svg{ width: 20px; height: 20px; }
   }
   @media (prefers-reduced-motion: reduce){
     *{ animation: none !important; transition: none !important; }
+    .scroll-fab svg{ transition: none; }
+    .scroll-fab::before{ animation: none; }
   }
 </style>
 </head>
@@ -348,9 +410,8 @@
       <span class="pill">Total: <b id="total">0</b></span>
       <span class="pill">Mostrando: <b id="shown">0</b></span>
       <span class="pill">Autores: <b id="authors">0</b></span>
-      <span class="pill good">Abiertos: <b id="openedCount">0</b></span>
-      <span class="pill">Vistas previas: <b id="previewCount">0</b></span>
       <span class="pill like">Likes: <b id="likeCount">0</b></span>
+      <span class="pill muted">Eliminados: <b id="deletedCount">0</b></span>
     </div>
   </header>
 
@@ -359,19 +420,30 @@
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
       <input type="text" id="search" placeholder="Buscar por usuario, ID o número…" autocomplete="off">
     </div>
-    <button class="btn" id="copyAll" title="Copiar todos los enlaces al portapapeles">
+    <button class="btn" id="copyAll" title="Copiar todos los enlaces pendientes al portapapeles">
       <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2">
         <rect x="9" y="9" width="12" height="12" rx="2"/>
         <path d="M5 15V5a2 2 0 0 1 2-2h10"/>
       </svg>
-      Copiar todos
+      Copiar
     </button>
-    <button class="btn danger" id="clearMarks" title="Olvidar qué enlaces has abierto y previsualizado">
+    <button class="btn danger" id="clearMarks" title="Restaurar todo al estado inicial">
       <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2">
         <path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
         <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
       </svg>
-      Limpiar marcas
+      Restaurar todo
+    </button>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-view="pending" role="tab" aria-selected="true">
+      📋 Pendientes
+      <span class="badge" id="tabPending">0</span>
+    </button>
+    <button class="tab" data-view="archived" role="tab" aria-selected="false">
+      📦 Archivados
+      <span class="badge" id="tabArchived">0</span>
     </button>
   </div>
 
@@ -381,33 +453,42 @@
   </div>
 
   <div class="list" id="list" style="display:none"></div>
-  <div class="status-box empty" id="empty">🔍 No se encontraron enlaces para esa búsqueda.</div>
+  <div class="status-box empty" id="empty"></div>
 
   <footer>
-    <p>Los enlaces se abren en una pestaña nueva · Tus marcas y likes se guardan localmente en este navegador</p>
+    <p>Los enlaces se abren en una pestaña nueva · Tus marcas, likes y posición se guardan localmente en este navegador</p>
   </footer>
 
 </div>
+
+<button class="scroll-fab to-bottom" id="scrollFab"
+        type="button" title="Ir al final" aria-label="Ir al final">
+  <svg viewBox="0 0 24 24">
+    <polyline points="6 9 12 15 18 9"/>
+  </svg>
+</button>
 
 <script>
 /* ============================================================
    CONFIGURACIÓN
    ============================================================ */
-const ARCHIVO_ENLACES = 'enlaces.txt';
-const STORAGE_OPENED  = 'xlinks_opened_v1';
-const STORAGE_PREVIEW = 'xlinks_preview_v1';
-const STORAGE_LIKED   = 'xlinks_liked_v1';
+const ARCHIVO_ENLACES  = 'enlaces.txt';
+const STORAGE_OPENED   = 'xlinks_opened_v1';
+const STORAGE_LIKED    = 'xlinks_liked_v1';
+const STORAGE_DELETED  = 'xlinks_deleted_v1';
+const STORAGE_SCROLL   = 'xlinks_scroll_v1';
 
 /* ============================================================
    ESTADO
    ============================================================ */
 let LINKS = [];
-let openedSet  = new Set();
-let previewSet = new Set();
-let likedSet   = new Set();
+let openedSet  = new Set();   // visitados (van a Archivados)
+let likedSet   = new Set();   // con like dado
+let deletedSet = new Set();   // eliminados de la vista (permanente hasta limpiar cache)
+let currentView = 'pending';  // 'pending' | 'archived'
 
-let xScriptPromise = null;
-let twttrReady     = false;
+let scrollPositions = { pending: 0, archived: 0 };
+let scrollSaveTimer = null;
 
 /* ============================================================
    PERSISTENCIA
@@ -415,17 +496,25 @@ let twttrReady     = false;
 function cargarSets(){
   try {
     const a = localStorage.getItem(STORAGE_OPENED);
-    const b = localStorage.getItem(STORAGE_PREVIEW);
     const c = localStorage.getItem(STORAGE_LIKED);
+    const d = localStorage.getItem(STORAGE_DELETED);
+    const s = localStorage.getItem(STORAGE_SCROLL);
     openedSet  = new Set(a ? JSON.parse(a) : []);
-    previewSet = new Set(b ? JSON.parse(b) : []);
     likedSet   = new Set(c ? JSON.parse(c) : []);
+    deletedSet = new Set(d ? JSON.parse(d) : []);
+    scrollPositions = s ? JSON.parse(s) : { pending: 0, archived: 0 };
+    if (typeof scrollPositions.pending  !== 'number') scrollPositions.pending  = 0;
+    if (typeof scrollPositions.archived !== 'number') scrollPositions.archived = 0;
   } catch(e){
-    openedSet = new Set(); previewSet = new Set(); likedSet = new Set();
+    openedSet = new Set(); likedSet = new Set(); deletedSet = new Set();
+    scrollPositions = { pending: 0, archived: 0 };
   }
 }
 function guardarSet(key, set){
   try { localStorage.setItem(key, JSON.stringify([...set])); } catch(e){}
+}
+function guardarScrollPositions(){
+  try { localStorage.setItem(STORAGE_SCROLL, JSON.stringify(scrollPositions)); } catch(e){}
 }
 
 /* ============================================================
@@ -446,91 +535,56 @@ async function cargarEnlaces(){
 const handleOf = u => (u.match(/x\.com\/([^/]+)\//) || [,''])[1];
 const idOf     = u => (u.match(/status\/(\d+)/)    || [,''])[1];
 
-/* ============================================================
-   CARGA ÚNICA DEL SCRIPT DE X
-   ============================================================ */
-function cargarScriptX(){
-  if (xScriptPromise) return xScriptPromise;
-
-  xScriptPromise = new Promise((resolve, reject) => {
-    if (window.twttr && window.twttr.widgets){
-      twttrReady = true;
-      return resolve(window.twttr);
-    }
-
-    const s = document.createElement('script');
-    s.src = 'https://platform.x.com/widgets.js';
-    s.async = true;
-    s.charset = 'utf-8';
-    s.onload = () => {
-      if (window.twttr && window.twttr.ready){
-        window.twttr.ready(t => {
-          twttrReady = true;
-          enlazarEventoLike(t);
-          resolve(t);
-        });
-      } else {
-        reject(new Error('twttr no disponible tras cargar el script'));
-      }
-    };
-    s.onerror = () => reject(new Error('No se pudo cargar widgets.js'));
-    document.head.appendChild(s);
-  });
-
-  return xScriptPromise;
-}
-
-/* ============================================================
-   EVENTO GLOBAL DE LIKE (Web Intent)
-   ============================================================
-   Cuando el usuario completa un like desde el popup de X,
-   twttr dispara el evento 'like'. Aprovechamos para marcar
-   el botón correspondiente como "liked".
-   ============================================================ */
-let ultimoLikeId = null; // guardamos el id que estamos esperando confirmar
-function enlazarEventoLike(twttr){
-  twttr.events.bind('like', (event) => {
-    // event.target contiene el iframe del intent
-    // Recuperamos el tweet_id del dataset del botón que disparó la acción
-    if (ultimoLikeId){
-      const url = LINKS.find(u => idOf(u) === ultimoLikeId);
-      if (url){
-        likedSet.add(url);
-        guardarSet(STORAGE_LIKED, likedSet);
-        actualizarContadores();
-        // Actualizamos el botón visualmente
-        const btn = document.querySelector(`.like-btn[data-id="${ultimoLikeId}"]`);
-        if (btn){
-          btn.classList.add('liked');
-          btn.title = 'Ya diste me gusta';
-        }
-      }
-      ultimoLikeId = null;
-    }
-  });
-}
+/* Un item es "visible" si no está eliminado de la vista */
+const esVisible = u => !deletedSet.has(u);
 
 /* ============================================================
    RENDER PRINCIPAL
    ============================================================ */
 function render(){
-  const listEl = document.getElementById('list');
+  const listEl  = document.getElementById('list');
+  const emptyEl = document.getElementById('empty');
+  const statusEl= document.getElementById('status');
+
   listEl.innerHTML = '';
 
   if (!LINKS.length){
-    document.getElementById('status').style.display = 'none';
-    const empty = document.getElementById('empty');
-    empty.classList.add('show');
-    empty.textContent = 'El archivo enlaces.txt está vacío.';
+    statusEl.style.display = 'none';
+    emptyEl.classList.add('show');
+    emptyEl.textContent = 'El archivo enlaces.txt está vacío.';
     return;
   }
 
-  document.getElementById('status').style.display = 'none';
+  statusEl.style.display = 'none';
+
+  const items = LINKS
+    .map((url, i) => ({ url, i }))
+    .filter(({ url }) => {
+      if (!esVisible(url)) return false;
+      const isOpened = openedSet.has(url);
+      return currentView === 'pending' ? !isOpened : isOpened;
+    });
+
+  if (!items.length){
+    listEl.style.display = 'none';
+    emptyEl.classList.add('show');
+    if (currentView === 'pending'){
+      emptyEl.innerHTML = '🎉 <strong>¡Felicidades!</strong><br>No quedan enlaces pendientes por visitar.';
+    } else {
+      emptyEl.innerHTML = '📦 La carpeta de archivados está vacía.<br>Los enlaces que visites aparecerán aquí.';
+    }
+    document.getElementById('shown').textContent = 0;
+    actualizarContadores();
+    actualizarTabs();
+    return;
+  }
+
+  emptyEl.classList.remove('show');
   listEl.style.display = '';
 
   const frag = document.createDocumentFragment();
 
-  LINKS.forEach((url, i) => {
+  items.forEach(({ url, i }) => {
     const handle  = handleOf(url);
     const id      = idOf(url);
     const abierto = openedSet.has(url);
@@ -561,7 +615,7 @@ function render(){
       '<span class="id">/status/' + id + '</span>';
     a.addEventListener('click', () => marcarAbierto(url, row));
 
-    // -------- Botón "Like" (Web Intent) --------
+    // -------- Botón "Like" --------
     const likeBtn = document.createElement('button');
     likeBtn.className = 'like-btn action-btn' + (gustado ? ' liked' : '');
     likeBtn.type = 'button';
@@ -572,32 +626,9 @@ function render(){
       '<svg viewBox="0 0 24 24">' +
         '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>' +
       '</svg>';
-
     likeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       abrirIntentLike(id, likeBtn);
-    });
-
-    // -------- Botón "Vista previa" --------
-    const previewBtn = document.createElement('button');
-    previewBtn.className = 'preview-toggle';
-    previewBtn.type = 'button';
-    previewBtn.title = 'Cargar vista previa del post';
-    previewBtn.innerHTML =
-      '<svg viewBox="0 0 24 24">' +
-        '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>' +
-        '<circle cx="12" cy="12" r="3"/>' +
-      '</svg><span>Vista previa</span>';
-
-    const previewBox = document.createElement('div');
-    previewBox.className = 'preview-container';
-    const previewInner = document.createElement('div');
-    previewInner.className = 'preview-inner';
-    previewBox.appendChild(previewInner);
-
-    previewBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      togglePreview(url, id, row, previewBtn, previewBox, previewInner);
     });
 
     // -------- Botón copiar --------
@@ -621,27 +652,213 @@ function render(){
       setTimeout(() => copyBtn.classList.remove('done'), 1200);
     });
 
-    row.append(check, num, a, likeBtn, previewBtn, copyBtn, previewBox);
+    // -------- Botones específicos de archivados --------
+    let restoreBtn = null;
+    let deleteBtn  = null;
+
+    if (currentView === 'archived'){
+      // Restaurar (volver a pendientes)
+      restoreBtn = document.createElement('button');
+      restoreBtn.className = 'restore action-btn';
+      restoreBtn.type = 'button';
+      restoreBtn.title = 'Mover de vuelta a pendientes';
+      restoreBtn.setAttribute('aria-label', 'Restaurar');
+      restoreBtn.innerHTML =
+        '<svg viewBox="0 0 24 24">' +
+          '<path d="M3 12a9 9 0 1 0 3-6.7"/>' +
+          '<polyline points="3 4 3 9 8 9"/>' +
+        '</svg>';
+      restoreBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        restaurar(url);
+      });
+
+      // Eliminar de la vista (permanente hasta vaciar cache)
+      deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn action-btn';
+      deleteBtn.type = 'button';
+      deleteBtn.title = 'Eliminar de la vista (no afecta al archivo original)';
+      deleteBtn.setAttribute('aria-label', 'Eliminar de la vista');
+      deleteBtn.innerHTML =
+        '<svg viewBox="0 0 24 24">' +
+          '<path d="M3 6h18"/>' +
+          '<path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>' +
+          '<path d="M10 11v6"/>' +
+          '<path d="M14 11v6"/>' +
+          '<path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>' +
+        '</svg>';
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        eliminarDeVista(url, row);
+      });
+    }
+
+    // Orden de botones
+    if (currentView === 'archived'){
+      row.append(check, num, a, likeBtn, copyBtn, restoreBtn, deleteBtn);
+    } else {
+      row.append(check, num, a, likeBtn, copyBtn);
+    }
+
     frag.appendChild(row);
   });
 
   listEl.appendChild(frag);
 
   document.getElementById('total').textContent   = LINKS.length;
-  document.getElementById('shown').textContent   = LINKS.length;
   document.getElementById('authors').textContent = new Set(LINKS.map(handleOf)).size;
   actualizarContadores();
+  actualizarTabs();
+  aplicarBusqueda();
+}
+
+/* ============================================================
+   ACTUALIZAR TABS Y CONTADORES
+   ============================================================ */
+function actualizarTabs(){
+  const pendientes = LINKS.filter(u => !openedSet.has(u) && esVisible(u)).length;
+  const archivados = LINKS.filter(u =>  openedSet.has(u) && esVisible(u)).length;
+  document.getElementById('tabPending').textContent  = pendientes;
+  document.getElementById('tabArchived').textContent = archivados;
+}
+
+function actualizarContadores(){
+  const likes = LINKS.filter(u => likedSet.has(u) && esVisible(u)).length;
+  const del   = LINKS.filter(u => deletedSet.has(u)).length;
+  document.getElementById('likeCount').textContent    = likes;
+  document.getElementById('deletedCount').textContent = del;
+}
+
+/* ============================================================
+   SCROLL PERSISTENTE POR VISTA
+   ============================================================ */
+function guardarScrollActual(){
+  scrollPositions[currentView] = window.scrollY || 0;
+  guardarScrollPositions();
+}
+
+function restaurarScrollDeVistaActual(){
+  const pos = scrollPositions[currentView] || 0;
+  // Doble rAF para asegurar que el layout esté listo tras el render
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: pos, behavior: 'auto' });
+    });
+  });
+}
+
+function activarScrollListener(){
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollSaveTimer);
+    scrollSaveTimer = setTimeout(() => {
+      scrollPositions[currentView] = window.scrollY || 0;
+      guardarScrollPositions();
+    }, 200);
+  }, { passive: true });
+
+  // Guardar antes de salir de la página (por si cierra la pestaña)
+  window.addEventListener('beforeunload', guardarScrollActual);
+  // Guardar cuando la pestaña pierde visibilidad (cambio de pestaña del navegador)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) guardarScrollActual();
+  });
+}
+
+/* ============================================================
+   CAMBIO DE VISTA (TABS) con preservación de scroll
+   ============================================================ */
+function activarTabs(){
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const nuevaVista = tab.dataset.view;
+      if (nuevaVista === currentView) return;
+
+      // 1. Guardamos el scroll de la vista actual antes de cambiar
+      guardarScrollActual();
+
+      // 2. Cambiamos el estado
+      currentView = nuevaVista;
+
+      // 3. Actualizamos clases de las tabs
+      document.querySelectorAll('.tab').forEach(t => {
+        const active = t.dataset.view === currentView;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+
+      // 4. Renderizamos la nueva vista
+      render();
+
+      // 5. Restauramos la posición guardada de la nueva vista
+      restaurarScrollDeVistaActual();
+    });
+  });
+}
+
+/* ============================================================
+   MARCAR COMO ABIERTO (mueve de pendientes a archivados)
+   ============================================================ */
+function marcarAbierto(url, row){
+  if (openedSet.has(url)) return;
+  openedSet.add(url);
+  guardarSet(STORAGE_OPENED, openedSet);
+
+  row.classList.add('opened');
+  actualizarContadores();
+  actualizarTabs();
+
+  if (currentView === 'pending'){
+    setTimeout(() => {
+      row.classList.add('removing');
+      setTimeout(() => render(), 380);
+    }, 550);
+  }
+}
+
+/* ============================================================
+   RESTAURAR (mueve de archivados a pendientes)
+   ============================================================ */
+function restaurar(url){
+  if (!openedSet.has(url)) return;
+  openedSet.delete(url);
+  guardarSet(STORAGE_OPENED, openedSet);
+  actualizarContadores();
+  actualizarTabs();
+
+  const row = document.querySelector(`.item[data-url="${CSS.escape(url)}"]`);
+  if (row){
+    row.classList.add('removing');
+    setTimeout(() => render(), 380);
+  } else {
+    render();
+  }
+}
+
+/* ============================================================
+   ELIMINAR DE LA VISTA (solo en archivados)
+   ============================================================
+   El enlace sigue en enlaces.txt, solo lo ocultamos del render.
+   Se revierte vaciando el localStorage (o "Restaurar todo").
+   ============================================================ */
+function eliminarDeVista(url, row){
+  if (deletedSet.has(url)) return;
+  deletedSet.add(url);
+  guardarSet(STORAGE_DELETED, deletedSet);
+  actualizarContadores();
+  actualizarTabs();
+
+  if (row){
+    row.classList.add('removing');
+    setTimeout(() => render(), 380);
+  } else {
+    render();
+  }
 }
 
 /* ============================================================
    WEB INTENT DE LIKE
-   ============================================================
-   Abre el popup oficial de X para dar me gusta.
-   Además, precargamos el script de twttr para escuchar el evento.
    ============================================================ */
 function abrirIntentLike(id, btn){
-  ultimoLikeId = id;
-
   const w = 550, h = 420;
   const left = Math.max(0, (screen.width  - w) / 2);
   const top  = Math.max(0, (screen.height - h) / 2);
@@ -650,116 +867,45 @@ function abrirIntentLike(id, btn){
   window.open(url, 'x-like',
     `width=${w},height=${h},left=${left},top=${top},scrollbars=yes,resizable=yes`);
 
-  // Cargamos twttr en segundo plano para escuchar el evento de confirmación
-  cargarScriptX().catch(() => {
-    // Si falla el script, al menos marcamos como "liked" localmente
-    // (el usuario ya habrá dado like en el popup)
-  });
-
-  // Feedback optimista: si en 1.5s no recibimos confirmación,
-  // igualmente marcamos visualmente como liked (el usuario cerró el popup)
   setTimeout(() => {
-    if (ultimoLikeId === id){
-      const url2 = LINKS.find(u => idOf(u) === id);
-      if (url2 && !likedSet.has(url2)){
-        likedSet.add(url2);
-        guardarSet(STORAGE_LIKED, likedSet);
-        btn.classList.add('liked');
-        btn.title = 'Ya diste me gusta';
-        actualizarContadores();
-      }
-      ultimoLikeId = null;
+    const url2 = LINKS.find(u => idOf(u) === id);
+    if (url2 && !likedSet.has(url2)){
+      likedSet.add(url2);
+      guardarSet(STORAGE_LIKED, likedSet);
+      btn.classList.add('liked');
+      btn.title = 'Ya diste me gusta';
+      actualizarContadores();
     }
   }, 1500);
 }
 
 /* ============================================================
-   TOGGLE DE VISTA PREVIA
-   ============================================================ */
-async function togglePreview(url, id, row, btn, box, inner){
-  if (box.classList.contains('show')){
-    box.classList.remove('show');
-    btn.classList.remove('active');
-    btn.querySelector('span').textContent = 'Vista previa';
-    inner.innerHTML = '';
-    return;
-  }
-
-  box.classList.add('show');
-  btn.classList.add('active');
-  btn.querySelector('span').textContent = 'Cerrar vista';
-
-  inner.innerHTML = '<div class="loading"><span class="preview-spinner"></span>Cargando vista previa…</div>';
-
-  try {
-    const twttr = await cargarScriptX();
-    inner.innerHTML = '';
-
-    await twttr.widgets.createTweet(id, inner, {
-      theme: 'dark',
-      align: 'center',
-      conversation: 'none',
-      dnt: true,
-      lang: 'es'
-    });
-
-    previewSet.add(url);
-    guardarSet(STORAGE_PREVIEW, previewSet);
-    actualizarContadores();
-
-  } catch(err){
-    inner.innerHTML =
-      '<div class="preview-error">No se pudo cargar la vista previa.<br>' +
-      'Es posible que el post ya no esté disponible.</div>';
-  }
-}
-
-/* ============================================================
-   MARCADO COMO ABIERTO
-   ============================================================ */
-function marcarAbierto(url, row){
-  if (openedSet.has(url)) return;
-  openedSet.add(url);
-  guardarSet(STORAGE_OPENED, openedSet);
-  row.classList.add('opened');
-  actualizarContadores();
-}
-
-/* ============================================================
-   CONTADORES
-   ============================================================ */
-function actualizarContadores(){
-  const abiertos  = LINKS.filter(u => openedSet.has(u)).length;
-  const previsual = LINKS.filter(u => previewSet.has(u)).length;
-  const likes     = LINKS.filter(u => likedSet.has(u)).length;
-  document.getElementById('openedCount').textContent  = abiertos;
-  document.getElementById('previewCount').textContent = previsual;
-  document.getElementById('likeCount').textContent    = likes;
-}
-
-/* ============================================================
    BUSCADOR
    ============================================================ */
-function activarBuscador(){
+function aplicarBusqueda(){
   const searchEl = document.getElementById('search');
   const emptyEl  = document.getElementById('empty');
+  const q = searchEl.value.trim().toLowerCase();
 
-  searchEl.addEventListener('input', () => {
-    const q = searchEl.value.trim().toLowerCase();
-    let visible = 0;
-    document.querySelectorAll('.item').forEach(el => {
-      const match = !q || el.dataset.search.includes(q);
-      el.style.display = match ? '' : 'none';
-      if (match) visible++;
-    });
-    document.getElementById('shown').textContent = visible;
-    if (LINKS.length && visible === 0){
-      emptyEl.classList.add('show');
-      emptyEl.textContent = '🔍 No se encontraron enlaces para esa búsqueda.';
-    } else {
-      emptyEl.classList.remove('show');
-    }
+  let visible = 0;
+  document.querySelectorAll('.item').forEach(el => {
+    const match = !q || el.dataset.search.includes(q);
+    el.style.display = match ? '' : 'none';
+    if (match) visible++;
   });
+  document.getElementById('shown').textContent = visible;
+
+  const hayItemsEnVista = document.querySelectorAll('.item').length > 0;
+  if (hayItemsEnVista && visible === 0){
+    emptyEl.classList.add('show');
+    emptyEl.textContent = '🔍 No se encontraron enlaces para esa búsqueda en esta vista.';
+  } else if (hayItemsEnVista){
+    emptyEl.classList.remove('show');
+  }
+}
+
+function activarBuscador(){
+  document.getElementById('search').addEventListener('input', aplicarBusqueda);
 }
 
 /* ============================================================
@@ -769,7 +915,16 @@ function activarCopiarTodo(){
   document.getElementById('copyAll').addEventListener('click', async (e) => {
     const btn = e.currentTarget;
     const original = btn.innerHTML;
-    const texto = LINKS.join('\n');
+    const pendientes = LINKS.filter(u => !openedSet.has(u) && esVisible(u));
+    const texto = pendientes.join('\n');
+
+    if (!texto){
+      btn.classList.add('ok');
+      btn.innerHTML = '✓ Nada que copiar';
+      setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = original; }, 1800);
+      return;
+    }
+
     try { await navigator.clipboard.writeText(texto); }
     catch(_){
       const ta = document.createElement('textarea');
@@ -777,34 +932,110 @@ function activarCopiarTodo(){
       document.execCommand('copy'); ta.remove();
     }
     btn.classList.add('ok');
-    btn.innerHTML = '✓ ¡Copiados!';
+    btn.innerHTML = `✓ ${pendientes.length} copiados`;
     setTimeout(() => { btn.classList.remove('ok'); btn.innerHTML = original; }, 1800);
   });
 }
 
-function activarLimpiarMarcas(){
+function activarRestaurarTodo(){
   document.getElementById('clearMarks').addEventListener('click', () => {
-    if (!openedSet.size && !previewSet.size && !likedSet.size) return;
-    if (!confirm('¿Olvidar qué enlaces has abierto, previsualizado y likeado?')) return;
-    openedSet.clear(); previewSet.clear(); likedSet.clear();
+    const total = openedSet.size + likedSet.size + deletedSet.size;
+    if (!total) return;
+    if (!confirm(
+      'Esto restaurará TODO al estado inicial:\n' +
+      '• Los archivados volverán a Pendientes\n' +
+      '• Se olvidarán los likes\n' +
+      '• Los eliminados volverán a aparecer\n\n' +
+      'El archivo enlaces.txt no se modifica.\n\n¿Continuar?'
+    )) return;
+
+    openedSet.clear();
+    likedSet.clear();
+    deletedSet.clear();
     guardarSet(STORAGE_OPENED, openedSet);
-    guardarSet(STORAGE_PREVIEW, previewSet);
     guardarSet(STORAGE_LIKED, likedSet);
-    document.querySelectorAll('.item.opened').forEach(el => el.classList.remove('opened'));
-    document.querySelectorAll('.preview-container.show').forEach(box => {
-      box.classList.remove('show');
-      box.querySelector('.preview-inner').innerHTML = '';
-    });
-    document.querySelectorAll('.preview-toggle.active').forEach(b => {
-      b.classList.remove('active');
-      b.querySelector('span').textContent = 'Vista previa';
-    });
-    document.querySelectorAll('.like-btn.liked').forEach(b => {
-      b.classList.remove('liked');
-      b.title = 'Dar me gusta en X';
-    });
-    actualizarContadores();
+    guardarSet(STORAGE_DELETED, deletedSet);
+
+    if (currentView === 'archived'){
+      currentView = 'pending';
+      document.querySelectorAll('.tab').forEach(t => {
+        const active = t.dataset.view === 'pending';
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+}
+
+/* ============================================================
+   BOTÓN FLOTANTE DE SCROLL
+   ============================================================ */
+function activarScrollFab(){
+  const fab = document.getElementById('scrollFab');
+  if (!fab) return;
+
+  let fabTimer = null;
+
+  function actualizarEstado(){
+    const scrollY = window.scrollY;
+    const maxScroll = Math.max(
+      0,
+      document.documentElement.scrollHeight - window.innerHeight
+    );
+
+    if (maxScroll < 200){
+      fab.style.display = 'none';
+      return;
+    }
+    fab.style.display = '';
+
+    const enMitadSuperior = scrollY < maxScroll / 2;
+
+    if (enMitadSuperior){
+      fab.classList.remove('to-top');
+      fab.classList.add('to-bottom');
+      fab.title = 'Ir al final';
+      fab.setAttribute('aria-label', 'Ir al final');
+    } else {
+      fab.classList.remove('to-bottom');
+      fab.classList.add('to-top');
+      fab.title = 'Ir al principio';
+      fab.setAttribute('aria-label', 'Ir al principio');
+    }
+  }
+
+  fab.addEventListener('click', () => {
+    const scrollY = window.scrollY;
+    const maxScroll = Math.max(
+      0,
+      document.documentElement.scrollHeight - window.innerHeight
+    );
+    const irAlFondo = scrollY < maxScroll / 2;
+
+    fab.classList.add('scrolling');
+    clearTimeout(fabTimer);
+    fabTimer = setTimeout(() => fab.classList.remove('scrolling'), 700);
+
+    window.scrollTo({
+      top: irAlFondo ? document.documentElement.scrollHeight : 0,
+      behavior: 'smooth'
+    });
+  });
+
+  window.addEventListener('scroll', actualizarEstado, { passive: true });
+  window.addEventListener('resize', actualizarEstado);
+
+  actualizarEstado();
+  requestAnimationFrame(actualizarEstado);
+}
+
+function activarScrollFabActualizado(){
+  const fab = document.getElementById('scrollFab');
+  if (!fab) return;
+  window.dispatchEvent(new Event('resize'));
 }
 
 /* ============================================================
@@ -812,13 +1043,19 @@ function activarLimpiarMarcas(){
    ============================================================ */
 (async function init(){
   cargarSets();
+  activarTabs();
   activarBuscador();
   activarCopiarTodo();
-  activarLimpiarMarcas();
+  activarRestaurarTodo();
+  activarScrollFab();
+  activarScrollListener();
 
   try {
     LINKS = await cargarEnlaces();
     render();
+    activarScrollFabActualizado();
+    // Restaurar la posición guardada tras el primer render
+    restaurarScrollDeVistaActual();
   } catch(err){
     const st = document.getElementById('status');
     st.className = 'status-box error';
